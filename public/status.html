@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check Status</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">ADA Tracker</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="status.html">Check Status</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="runnow.html">Run Now</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h3 class="mb-4">📅 Daily Record Summary</h3>
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>Date</th>
+          <th>Records Inserted</th>
+        </tr>
+      </thead>
+      <tbody id="status-body">
+        <!-- Rows will be populated by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    window.onload = async () => {
+      try {
+        const res = await fetch('/api/status'); // Make sure this route is set up in your backend
+        const data = await res.json();
+        const tbody = document.getElementById('status-body');
+
+        data.forEach(entry => {
+          const row = document.createElement('tr');
+          row.innerHTML = `<td>${entry.date}</td><td>${entry.count}</td>`;
+          tbody.appendChild(row);
+        });
+      } catch (err) {
+        console.error('Error fetching status data:', err);
+      }
+    };
+  </script>
+</body>
+</html>
