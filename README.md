@@ -12,7 +12,7 @@ This Node.js application pulls accessibility data from the Siteimprove API and i
 - PM2 support for background running
 - Modular and easy to extend
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - Node.js
 - Express
