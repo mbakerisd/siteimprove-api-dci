@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ADA Cleanup</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">ADA Tracker</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/status">Check Status</a></li>
+          <li class="nav-item"><a class="nav-link" href="/runnow">Run Now</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/remove-now">Remove Now</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h3 class="mb-4">🧹 ADA Cleanup Job</h3>
+    <button id="removeBtn" class="btn btn-danger mb-3">Remove Unapproved Records</button>
+    <div id="status" class="mb-3"></div>
+
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>Month</th>
+          <th>Records Deleted</th>
+        </tr>
+      </thead>
+      <tbody id="deleted-summary-body"></tbody>
+    </table>
+
+    <a href="/deletion-report" class="btn btn-outline-primary mt-3">📄 View Deleted Records</a>
+  </div>
+
+  <script>
+    document.getElementById('removeBtn').addEventListener('click', async () => {
+      const statusDiv = document.getElementById('status');
+      const tbody = document.getElementById('deleted-summary-body');
+      tbody.innerHTML = '';
+      statusDiv.textContent = 'Running cleanup...';
+
+      try {
+        const res = await fetch('/run-cleanup');
+        const text = await res.text();
+        statusDiv.textContent = text;
+
+        const summaryRes = await fetch('/api/deletion-summary');
+        const data = await summaryRes.json();
+
+        data.forEach(row => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${row.month}</td><td>${row.count}</td>`;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        statusDiv.textContent = '❌ Cleanup failed.';
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

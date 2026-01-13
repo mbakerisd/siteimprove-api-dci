@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Run Now</title>
+  <title><%= title %></title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -13,13 +13,13 @@
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="index.html">Home</a>
+            <a class="nav-link" href="/">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="status.html">Check Status</a>
+            <a class="nav-link" href="/status">Check Status</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="runnow.html">Run Now</a>
+            <a class="nav-link active" href="/runnow">Run Now</a>
           </li>
         </ul>
       </div>
@@ -40,7 +40,15 @@
         </tr>
       </thead>
       <tbody id="results-body">
-        <!-- Populated by JavaScript -->
+        <% if (typeof records !== 'undefined') { %>
+          <% records.forEach(rec => { %>
+            <tr>
+              <td><%= rec.name %></td>
+              <td><%= rec.url %></td>
+              <td><%= rec.date %></td>
+            </tr>
+          <% }) %>
+        <% } %>
       </tbody>
     </table>
   </div>
@@ -53,11 +61,11 @@
       statusDiv.textContent = 'Running...';
 
       try {
-        const res = await fetch('/run-now'); // Make sure your Express backend supports this
+        const res = await fetch('/run-now');
         const message = await res.text();
         statusDiv.textContent = message;
 
-        const resultsRes = await fetch('/api/today-records'); // You’ll need to implement this route
+        const resultsRes = await fetch('/api/today-records');
         const records = await resultsRes.json();
 
         records.forEach(rec => {

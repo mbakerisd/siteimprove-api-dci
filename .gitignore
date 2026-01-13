@@ -3,13 +3,42 @@ node_modules/
 
 # Environment files
 .env
+.env.local
+.env.production
 
 # Logs
 logs/
 *.log
+npm-debug.log*
+pm2-*.log
 
-# OS junk
+# OS files
 .DS_Store
+Thumbs.db
+desktop.ini
 
 # PM2
-pids
+pids/
+*.pid
+*.seed
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Archive/backup folders
+old/
+oldjs/
+backup/
+checklist/
+
+# Database dumps
+*.sql
+*.dump
